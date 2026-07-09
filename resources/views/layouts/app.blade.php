@@ -33,19 +33,7 @@
             --transition: all 0.3s ease;
         }
 
-        /* Dark Mode Variables */
-        [data-theme="dark"] {
-            --bg-color: #121417;
-            --sidebar-bg: #1e2125;
-            --sidebar-hover: #2c3034;
-            --sidebar-color: #e9ecef;
-            --topbar-bg: #1e2125;
-            --card-bg: #1e2125;
-            --text-main: #e9ecef;
-            --text-muted: #adb5bd;
-            --border-color: #343a40;
-            --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
-        }
+        /* Light theme only — dark mode disabled */
 
         body {
             font-family: 'Inter', sans-serif;
@@ -84,7 +72,7 @@
             font-weight: 600;
             background-color: rgba(0,0,0,0.02);
         }
-        [data-theme="dark"] .table th { background-color: rgba(255,255,255,0.02); }
+        /* [data-theme="dark"] .table th { background-color: rgba(255,255,255,0.02); } */
         .table-hover tbody tr:hover { background-color: var(--sidebar-hover); color: var(--text-main); }
         .form-control, .form-select {
             background-color: var(--card-bg);
@@ -286,12 +274,14 @@
         .widget-item:last-child { border-bottom: none; }
         .widget-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;}
         
-        /* Modals Dark Mode Support */
+        /* Modals */
         .modal-content { background-color: var(--card-bg); color: var(--text-main); }
         .modal-header { border-bottom-color: var(--border-color); }
         .modal-footer { border-top-color: var(--border-color); }
-        .btn-close { filter: var(--bs-btn-close-filter); }
-        [data-theme="dark"] { --bs-btn-close-filter: invert(1) grayscale(100%) brightness(200%); }
+
+        /* Stat card link hover */
+        .stat-card-link { cursor: pointer; }
+        a:hover .stat-card-link { box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.15); }
     </style>
 </head>
 <body>
@@ -363,9 +353,7 @@
                 </div>
             </div>
             <div class="topbar-right">
-                <button class="topbar-icon-btn" id="darkModeToggle" title="Mode Gelap/Terang">
-                    <i class="bi bi-moon"></i>
-                </button>
+
                 <button class="topbar-icon-btn" id="fullscreenToggle" title="Layar Penuh">
                     <i class="bi bi-arrows-fullscreen"></i>
                 </button>
@@ -445,31 +433,9 @@
 
 <!-- Custom JS for WMS UI Controls -->
 <script>
-    // Theme Switcher
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const htmlElement = document.documentElement;
-    
-    // Check saved theme or system preference
-    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    htmlElement.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
-
-    darkModeToggle.addEventListener('click', () => {
-        const currentTheme = htmlElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        htmlElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
-    });
-
-    function updateThemeIcon(theme) {
-        const icon = darkModeToggle.querySelector('i');
-        if (theme === 'dark') {
-            icon.className = 'bi bi-sun';
-        } else {
-            icon.className = 'bi bi-moon';
-        }
-    }
+    // Force light theme always
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
 
     // Sidebar Collapse
     const sidebarToggle = document.getElementById('sidebarToggle');

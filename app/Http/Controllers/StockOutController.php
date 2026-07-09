@@ -81,4 +81,13 @@ class StockOutController extends Controller
             return redirect()->route('stock-out.index')->with('error', 'Gagal membatalkan transaksi: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Show printable receipt for a stock-out transaction.
+     */
+    public function receipt(StockOut $stockOut)
+    {
+        $stockOut->load('product.category');
+        return view('stock-out.receipt', compact('stockOut'));
+    }
 }

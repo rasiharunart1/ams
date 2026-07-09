@@ -81,4 +81,13 @@ class StockInController extends Controller
             return redirect()->route('stock-in.index')->with('error', 'Gagal membatalkan transaksi: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Show printable receipt for a stock-in transaction.
+     */
+    public function receipt(StockIn $stockIn)
+    {
+        $stockIn->load('product.category');
+        return view('stock-in.receipt', compact('stockIn'));
+    }
 }

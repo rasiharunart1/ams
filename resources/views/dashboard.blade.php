@@ -12,31 +12,40 @@
     <!-- Stats Row -->
     <div class="row">
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card">
-                <div class="stat-icon primary"><i class="bi bi-box-seam"></i></div>
-                <div class="stat-details">
-                    <h3>{{ $totalProducts }}</h3>
-                    <p>Total Produk</p>
+            <a href="{{ route('products.index') }}" class="text-decoration-none">
+                <div class="card stat-card stat-card-link">
+                    <div class="stat-icon primary"><i class="bi bi-box-seam"></i></div>
+                    <div class="stat-details">
+                        <h3>{{ $totalProducts }}</h3>
+                        <p>Total Produk</p>
+                    </div>
+                    <i class="bi bi-arrow-right-circle ms-auto text-primary opacity-50"></i>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card">
-                <div class="stat-icon success"><i class="bi bi-box-arrow-in-down"></i></div>
-                <div class="stat-details">
-                    <h3>{{ $stockInMonth }}</h3>
-                    <p>Brg Masuk (Bulan Ini)</p>
+            <a href="{{ route('stock-in.index') }}" class="text-decoration-none">
+                <div class="card stat-card stat-card-link">
+                    <div class="stat-icon success"><i class="bi bi-box-arrow-in-down"></i></div>
+                    <div class="stat-details">
+                        <h3>{{ $stockInMonth }}</h3>
+                        <p>Brg Masuk (Bulan Ini)</p>
+                    </div>
+                    <i class="bi bi-arrow-right-circle ms-auto text-success opacity-50"></i>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card">
-                <div class="stat-icon warning"><i class="bi bi-box-arrow-up"></i></div>
-                <div class="stat-details">
-                    <h3>{{ $stockOutMonth }}</h3>
-                    <p>Brg Keluar (Bulan Ini)</p>
+            <a href="{{ route('stock-out.index') }}" class="text-decoration-none">
+                <div class="card stat-card stat-card-link">
+                    <div class="stat-icon warning"><i class="bi bi-box-arrow-up"></i></div>
+                    <div class="stat-details">
+                        <h3>{{ $stockOutMonth }}</h3>
+                        <p>Brg Keluar (Bulan Ini)</p>
+                    </div>
+                    <i class="bi bi-arrow-right-circle ms-auto text-warning opacity-50"></i>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="card stat-card">

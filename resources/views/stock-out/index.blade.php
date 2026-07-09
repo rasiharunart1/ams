@@ -58,6 +58,10 @@
                                 <td>{{ $trx->receiver ?? '-' }}</td>
                                 <td class="text-muted-custom">{{ $trx->purpose ?? '-' }}</td>
                                 <td class="text-end">
+                                    <a href="{{ route('stock-out.receipt', $trx->id) }}" target="_blank"
+                                       class="btn btn-sm btn-outline-primary me-1" title="Cetak Struk PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                    </a>
                                     <form action="{{ route('stock-out.destroy', $trx->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan transaksi ini? Stok produk akan dikembalikan.');">
                                         @csrf
                                         @method('DELETE')

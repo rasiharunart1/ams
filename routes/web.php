@@ -25,7 +25,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Transactions
     Route::resource('stock-in', StockInController::class)->only(['index', 'store', 'destroy']);
+    Route::get('stock-in/{stockIn}/receipt', [StockInController::class, 'receipt'])->name('stock-in.receipt');
     Route::resource('stock-out', StockOutController::class)->only(['index', 'store', 'destroy']);
+    Route::get('stock-out/{stockOut}/receipt', [StockOutController::class, 'receipt'])->name('stock-out.receipt');
 
     // Monitoring
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');

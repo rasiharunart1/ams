@@ -121,14 +121,30 @@
             color: #6c757d;
         }
         .input-group .form-control {
+            border-radius: 0;
+            border-left: none;
+        }
+        /* Password field: middle input (no right radius) */
+        .input-group .form-control:not(:last-child) {
+            border-radius: 0;
+        }
+        /* Toggle button at end of input-group */
+        .input-group .input-group-text:last-child {
             border-radius: 0 10px 10px 0;
             border-left: none;
+            background: #f8f9fa;
+            border: 1.5px solid #e9ecef;
+            color: #6c757d;
+            transition: all 0.2s ease;
         }
         .input-group:focus-within .input-group-text {
             border-color: #0d6efd;
             color: #0d6efd;
         }
         .input-group:focus-within .form-control {
+            border-color: #0d6efd;
+        }
+        .input-group:focus-within .input-group-text:last-child {
             border-color: #0d6efd;
         }
 
@@ -204,6 +220,11 @@
                                id="password" name="password"
                                required autocomplete="current-password"
                                placeholder="Masukkan kata sandi">
+                        <button type="button" class="input-group-text" id="togglePassword"
+                                style="cursor:pointer; border-radius: 0 10px 10px 0; border-left: none;"
+                                title="Tampilkan/Sembunyikan kata sandi">
+                            <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                        </button>
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -236,5 +257,18 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('togglePasswordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        });
+    </script>
 </body>
 </html>
