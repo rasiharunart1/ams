@@ -6,6 +6,7 @@ use App\Models\StockOut;
 use App\Models\Product;
 use App\Services\InventoryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Exception;
 
 class StockOutController extends Controller
@@ -17,14 +18,10 @@ class StockOutController extends Controller
         $this->inventoryService = $inventoryService;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $query = StockOut::with('product.category');
 
-        // Search filter
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
@@ -36,7 +33,6 @@ class StockOutController extends Controller
             });
         }
 
-        // Date filter
         if ($request->filled('date')) {
             $query->whereDate('date', $request->input('date'));
         }
@@ -47,9 +43,6 @@ class StockOutController extends Controller
         return view('stock-out.index', compact('stockOuts', 'products'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -59,7 +52,12 @@ class StockOutController extends Controller
             'receiver' => 'nullable|string|max:255',
             'purpose' => 'nullable|string|max:255',
             'date' => 'required|date',
+            'receipt_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
+
+        if ($request->hasFile('receipt_file')) {
+            $validated['receipt_path'] = $request->file('receipt_file')->store('receipts/stock-out', 'public');
+        }
 
         try {
             $this->inventoryService->removeStock($validated);
@@ -69,12 +67,45 @@ class StockOutController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function show(StockOut $stockOut)
+    {
+        $stockOut->load('product.category');
+        return view('stock-out.show', compact('stockOut'));
+    }
+
+    public function updateReceipt(Request $request, StockOut $stockOut)
+    {
+        $request->validate([
+            'receipt_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+
+        if ($stockOut->receipt_path) {
+            Storage::disk('public')->delete($stockOut->receipt_path);
+        }
+
+        $stockOut->update([
+            'receipt_path' => $request->file('receipt_file')->store('receipts/stock-out', 'public'),
+        ]);
+
+        return redirect()->back()->with('success', 'Bukti kwitansi berhasil diperbarui.');
+    }
+
+    public function deleteReceipt(StockOut $stockOut)
+    {
+        if ($stockOut->receipt_path) {
+            Storage::disk('public')->delete($stockOut->receipt_path);
+            $stockOut->update(['receipt_path' => null]);
+        }
+
+        return redirect()->back()->with('success', 'Bukti kwitansi berhasil dihapus.');
+    }
+
     public function destroy(StockOut $stockOut)
     {
         try {
+            if ($stockOut->receipt_path) {
+                Storage::disk('public')->delete($stockOut->receipt_path);
+            }
             $this->inventoryService->reverseStockOut($stockOut);
             return redirect()->route('stock-out.index')->with('success', 'Transaksi keluar berhasil dibatalkan dan stok produk dikembalikan.');
         } catch (Exception $e) {
@@ -82,9 +113,6 @@ class StockOutController extends Controller
         }
     }
 
-    /**
-     * Show printable receipt for a stock-out transaction.
-     */
     public function receipt(StockOut $stockOut)
     {
         $stockOut->load('product.category');

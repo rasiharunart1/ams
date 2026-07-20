@@ -13,6 +13,7 @@ class StockOut extends Model
         'receiver',
         'purpose',
         'date',
+        'receipt_path',
     ];
 
     protected $casts = [

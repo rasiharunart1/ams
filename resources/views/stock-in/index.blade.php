@@ -1,4 +1,5 @@
 <x-app-layout>
+    @use('Illuminate\Support\Facades\Storage')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0 fw-bold">Transaksi Barang Masuk</h4>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalStockIn">
@@ -41,6 +42,7 @@
                             <th>Jml</th>
                             <th>Pemasok</th>
                             <th>Keterangan</th>
+                            <th>Kwitansi</th>
                             <th class="text-end">Aksi</th>
                         </tr>
                     </thead>
@@ -57,7 +59,20 @@
                                 <td class="fw-bold text-success">+{{ $trx->quantity }}</td>
                                 <td>{{ $trx->supplier ?? '-' }}</td>
                                 <td class="text-muted-custom">{{ $trx->description ?? '-' }}</td>
+                                <td>
+                                    @if($trx->receipt_path)
+                                        <a href="{{ Storage::url($trx->receipt_path) }}" target="_blank" class="btn btn-sm btn-outline-success" title="Lihat Kwitansi">
+                                            <i class="bi bi-file-earmark-check"></i>
+                                        </a>
+                                    @else
+                                        <span class="text-muted small">-</span>
+                                    @endif
+                                </td>
                                 <td class="text-end">
+                                    <a href="{{ route('stock-in.show', $trx->id) }}"
+                                       class="btn btn-sm btn-outline-info me-1" title="Detail & Kelola Kwitansi">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
                                     <a href="{{ route('stock-in.receipt', $trx->id) }}" target="_blank"
                                        class="btn btn-sm btn-outline-primary me-1" title="Cetak Struk PDF">
                                         <i class="bi bi-file-earmark-pdf"></i>
@@ -73,7 +88,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center py-4 text-muted-custom">
+                                <td colspan="9" class="text-center py-4 text-muted-custom">
                                     <i class="bi bi-box-arrow-in-down display-6 d-block mb-2 text-muted"></i>
                                     Tidak ada data transaksi masuk ditemukan.
                                 </td>
@@ -94,7 +109,7 @@
     <div class="modal fade" id="modalStockIn" tabindex="-1" aria-labelledby="modalStockInLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('stock-in.store') }}" method="POST">
+                <form action="{{ route('stock-in.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title fw-bold" id="modalStockInLabel">Tambah Data Barang Masuk</h5>
@@ -131,6 +146,10 @@
                         <div class="mb-3">
                             <label for="description" class="form-label fw-semibold">Keterangan</label>
                             <textarea class="form-control" id="description" name="description" rows="3" placeholder="Alasan masuk atau keterangan lain..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="receipt_file" class="form-label fw-semibold">Bukti Kwitansi <small class="text-muted">(JPG, PNG, PDF, maks 2MB)</small></label>
+                            <input type="file" class="form-control" id="receipt_file" name="receipt_file" accept=".jpg,.jpeg,.png,.pdf">
                         </div>
                     </div>
                     <div class="modal-footer">

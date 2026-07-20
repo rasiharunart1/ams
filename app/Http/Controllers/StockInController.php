@@ -6,6 +6,7 @@ use App\Models\StockIn;
 use App\Models\Product;
 use App\Services\InventoryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Exception;
 
 class StockInController extends Controller
@@ -17,14 +18,10 @@ class StockInController extends Controller
         $this->inventoryService = $inventoryService;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $query = StockIn::with('product.category');
 
-        // Search filter
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
@@ -36,7 +33,6 @@ class StockInController extends Controller
             });
         }
 
-        // Date filter
         if ($request->filled('date')) {
             $query->whereDate('date', $request->input('date'));
         }
@@ -47,9 +43,6 @@ class StockInController extends Controller
         return view('stock-in.index', compact('stockIns', 'products'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -59,7 +52,12 @@ class StockInController extends Controller
             'supplier' => 'nullable|string|max:255',
             'date' => 'required|date',
             'description' => 'nullable|string',
+            'receipt_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
+
+        if ($request->hasFile('receipt_file')) {
+            $validated['receipt_path'] = $request->file('receipt_file')->store('receipts/stock-in', 'public');
+        }
 
         try {
             $this->inventoryService->addStock($validated);
@@ -69,12 +67,45 @@ class StockInController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function show(StockIn $stockIn)
+    {
+        $stockIn->load('product.category');
+        return view('stock-in.show', compact('stockIn'));
+    }
+
+    public function updateReceipt(Request $request, StockIn $stockIn)
+    {
+        $request->validate([
+            'receipt_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+
+        if ($stockIn->receipt_path) {
+            Storage::disk('public')->delete($stockIn->receipt_path);
+        }
+
+        $stockIn->update([
+            'receipt_path' => $request->file('receipt_file')->store('receipts/stock-in', 'public'),
+        ]);
+
+        return redirect()->back()->with('success', 'Bukti kwitansi berhasil diperbarui.');
+    }
+
+    public function deleteReceipt(StockIn $stockIn)
+    {
+        if ($stockIn->receipt_path) {
+            Storage::disk('public')->delete($stockIn->receipt_path);
+            $stockIn->update(['receipt_path' => null]);
+        }
+
+        return redirect()->back()->with('success', 'Bukti kwitansi berhasil dihapus.');
+    }
+
     public function destroy(StockIn $stockIn)
     {
         try {
+            if ($stockIn->receipt_path) {
+                Storage::disk('public')->delete($stockIn->receipt_path);
+            }
             $this->inventoryService->reverseStockIn($stockIn);
             return redirect()->route('stock-in.index')->with('success', 'Transaksi masuk berhasil dibatalkan dan stok produk disesuaikan.');
         } catch (Exception $e) {
@@ -82,9 +113,6 @@ class StockInController extends Controller
         }
     }
 
-    /**
-     * Show printable receipt for a stock-in transaction.
-     */
     public function receipt(StockIn $stockIn)
     {
         $stockIn->load('product.category');

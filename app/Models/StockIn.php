@@ -13,6 +13,7 @@ class StockIn extends Model
         'supplier',
         'date',
         'description',
+        'receipt_path',
     ];
 
     protected $casts = [

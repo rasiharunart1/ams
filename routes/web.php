@@ -24,10 +24,15 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('products', ProductController::class);
 
     // Transactions
-    Route::resource('stock-in', StockInController::class)->only(['index', 'store', 'destroy']);
+    Route::resource('stock-in', StockInController::class)->only(['index', 'store', 'show', 'destroy']);
     Route::get('stock-in/{stockIn}/receipt', [StockInController::class, 'receipt'])->name('stock-in.receipt');
-    Route::resource('stock-out', StockOutController::class)->only(['index', 'store', 'destroy']);
+    Route::post('stock-in/{stockIn}/receipt', [StockInController::class, 'updateReceipt'])->name('stock-in.update-receipt');
+    Route::delete('stock-in/{stockIn}/receipt', [StockInController::class, 'deleteReceipt'])->name('stock-in.delete-receipt');
+
+    Route::resource('stock-out', StockOutController::class)->only(['index', 'store', 'show', 'destroy']);
     Route::get('stock-out/{stockOut}/receipt', [StockOutController::class, 'receipt'])->name('stock-out.receipt');
+    Route::post('stock-out/{stockOut}/receipt', [StockOutController::class, 'updateReceipt'])->name('stock-out.update-receipt');
+    Route::delete('stock-out/{stockOut}/receipt', [StockOutController::class, 'deleteReceipt'])->name('stock-out.delete-receipt');
 
     // Monitoring
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');

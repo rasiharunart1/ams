@@ -32,6 +32,7 @@ class InventoryService
                 'supplier' => $data['supplier'] ?? null,
                 'date' => $data['date'] ?? now()->toDateString(),
                 'description' => $data['description'] ?? null,
+                'receipt_path' => $data['receipt_path'] ?? null,
             ]);
 
             // Update current stock
@@ -69,6 +70,7 @@ class InventoryService
                 'receiver' => $data['receiver'] ?? null,
                 'purpose' => $data['purpose'] ?? null,
                 'date' => $data['date'] ?? now()->toDateString(),
+                'receipt_path' => $data['receipt_path'] ?? null,
             ]);
 
             // Update current stock
