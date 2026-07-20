@@ -1,5 +1,4 @@
 <x-app-layout>
-    @use('Illuminate\Support\Facades\Storage')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0 fw-bold">Transaksi Barang Masuk</h4>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalStockIn">
@@ -61,7 +60,7 @@
                                 <td class="text-muted-custom">{{ $trx->description ?? '-' }}</td>
                                 <td>
                                     @if($trx->receipt_path)
-                                        <a href="{{ Storage::url($trx->receipt_path) }}" target="_blank" class="btn btn-sm btn-outline-success" title="Lihat Kwitansi">
+                                        <a href="{{ asset('storage/' . $trx->receipt_path) }}" target="_blank" class="btn btn-sm btn-outline-success" title="Lihat Kwitansi">
                                             <i class="bi bi-file-earmark-check"></i>
                                         </a>
                                     @else

@@ -1,5 +1,4 @@
 <x-app-layout>
-    @use('Illuminate\Support\Facades\Storage')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0 fw-bold">Detail Transaksi Keluar</h4>
         <a href="{{ route('stock-out.index') }}" class="btn btn-outline-secondary">
@@ -62,13 +61,13 @@
                     @if($stockOut->receipt_path)
                         @php $ext = pathinfo($stockOut->receipt_path, PATHINFO_EXTENSION); @endphp
                         @if(in_array(strtolower($ext), ['jpg','jpeg','png']))
-                            <img src="{{ Storage::url($stockOut->receipt_path) }}" class="img-fluid rounded mb-3" alt="Bukti Kwitansi">
+                            <img src="{{ asset('storage/' . $stockOut->receipt_path) }}" class="img-fluid rounded mb-3" alt="Bukti Kwitansi">
                         @else
                             <div class="d-flex align-items-center mb-3 p-3 bg-light rounded">
                                 <i class="bi bi-file-earmark-pdf fs-1 text-danger me-3"></i>
                                 <div>
                                     <div class="fw-semibold">File PDF</div>
-                                    <a href="{{ Storage::url($stockOut->receipt_path) }}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">
+                                    <a href="{{ asset('storage/' . $stockOut->receipt_path) }}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">
                                         <i class="bi bi-eye me-1"></i>Buka PDF
                                     </a>
                                 </div>
