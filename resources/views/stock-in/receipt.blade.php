@@ -277,6 +277,32 @@
             text-transform: uppercase;
         }
 
+        /* Receipt image */
+        .receipt-image-section {
+            margin-bottom: 28px;
+        }
+        .receipt-image-section img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1.5px solid #d1e7dd;
+        }
+        .receipt-pdf-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #f8fffe;
+            border: 1.5px solid #d1e7dd;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #0f5132;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .receipt-pdf-link span { font-size: 1.5rem; }
+
         /* ===== PRINT STYLES ===== */
         @media print {
             body {
@@ -288,8 +314,13 @@
                 box-shadow: none;
                 border-radius: 0;
             }
+            .receipt-image-section img {
+                max-height: 300px;
+                page-break-inside: avoid;
+            }
+            .receipt-pdf-link { display: none !important; }
             @page {
-                size: A5 portrait;
+                size: A4 portrait;
                 margin: 10mm;
             }
         }
@@ -382,6 +413,20 @@
                 <div class="section-title">Keterangan</div>
                 <div class="notes-box">
                     <p>{{ $stockIn->description }}</p>
+                </div>
+                @endif
+
+                @if($stockIn->receipt_path)
+                @php $ext = strtolower(pathinfo($stockIn->receipt_path, PATHINFO_EXTENSION)); @endphp
+                <div class="section-title">Bukti Kwitansi</div>
+                <div class="receipt-image-section">
+                    @if(in_array($ext, ['jpg','jpeg','png']))
+                        <img src="{{ asset('storage/' . $stockIn->receipt_path) }}" alt="Bukti Kwitansi">
+                    @else
+                        <a href="{{ asset('storage/' . $stockIn->receipt_path) }}" target="_blank" class="receipt-pdf-link">
+                            <span>📄</span> Lihat File PDF Kwitansi (klik untuk buka)
+                        </a>
+                    @endif
                 </div>
                 @endif
 
