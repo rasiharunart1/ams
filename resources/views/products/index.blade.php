@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0 fw-bold">Data Produk</h4>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProduct">
-            <i class="bi bi-plus-lg me-2"></i>Tambah Produk
+            <i class="fa-solid fa-plus me-2"></i>Tambah Obat
         </button>
     </div>
 
@@ -72,13 +72,14 @@
                                     @endif
                                 </td>
                                 <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-info me-1 view-product-btn" 
+                                    <button class="btn btn-outline-info me-1 view-product-btn" 
                                             data-id="{{ $product->id }}" 
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#modalDetailProduct">
-                                        <i class="bi bi-eye-fill"></i>
+                                            data-bs-target="#modalDetailProduct"
+                                            title="Lihat Detail">
+                                        <i class="fa-solid fa-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-warning me-1 edit-product-btn" 
+                                    <button class="btn btn-outline-warning me-1 edit-product-btn" 
                                             data-id="{{ $product->id }}"
                                             data-code="{{ $product->code }}"
                                             data-name="{{ $product->name }}"
@@ -89,14 +90,15 @@
                                             data-current="{{ $product->current_stock }}"
                                             data-desc="{{ $product->description }}"
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#modalEditProduct">
-                                        <i class="bi bi-pencil-fill"></i>
+                                            data-bs-target="#modalEditProduct"
+                                            title="Edit Obat">
+                                        <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
                                     <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash-fill"></i>
+                                        <button type="submit" class="btn btn-outline-danger" title="Hapus Obat">
+                                            <i class="fa-solid fa-trash-can"></i>
                                         </button>
                                     </form>
                                 </td>

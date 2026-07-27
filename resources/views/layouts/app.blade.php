@@ -295,51 +295,67 @@
             <span class="brand-text">AMS</span>
         </div>
         <div class="sidebar-menu">
-            <a href="{{ route('dashboard') }}" class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <i class="fa-solid fa-chart-line menu-icon"></i>
-                <span class="menu-text">Dasbor</span>
-            </a>
+            @if(auth()->user()->role === 'superadmin')
+                <a href="{{ route('superadmin.dashboard') }}" class="menu-item {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
+                    <i class="fa-solid fa-chart-line menu-icon"></i>
+                    <span class="menu-text">Dasbor Superadmin</span>
+                </a>
+                <div class="menu-header">Manajemen Sistem</div>
+                <a href="{{ route('superadmin.users.index') }}" class="menu-item {{ request()->routeIs('superadmin.users.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-users-gear menu-icon"></i>
+                    <span class="menu-text">Kelola Pengguna</span>
+                </a>
+                <a href="/log-viewer" target="_blank" class="menu-item">
+                    <i class="fa-solid fa-server menu-icon"></i>
+                    <span class="menu-text">System Logs</span>
+                </a>
+            @else
+                <a href="{{ route('dashboard') }}" class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <i class="fa-solid fa-chart-line menu-icon"></i>
+                    <span class="menu-text">Dasbor</span>
+                </a>
 
-            <div class="menu-header">Data Master</div>
-            <a href="{{ route('products.index') }}" class="menu-item {{ request()->routeIs('products.*') ? 'active' : '' }}">
-                <i class="fa-solid fa-pills menu-icon"></i>
-                <span class="menu-text">Obat</span>
-            </a>
-            <a href="{{ route('categories.index') }}" class="menu-item {{ request()->routeIs('categories.*') ? 'active' : '' }}">
-                <i class="fa-solid fa-tags menu-icon"></i>
-                <span class="menu-text">Kategori</span>
-            </a>
+                <div class="menu-header">Data Master</div>
+                <a href="{{ route('products.index') }}" class="menu-item {{ request()->routeIs('products.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-pills menu-icon"></i>
+                    <span class="menu-text">Obat</span>
+                </a>
+                <a href="{{ route('categories.index') }}" class="menu-item {{ request()->routeIs('categories.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-tags menu-icon"></i>
+                    <span class="menu-text">Kategori</span>
+                </a>
 
-            <div class="menu-header">Transaksi</div>
-            <a href="{{ route('stock-in.index') }}" class="menu-item {{ request()->routeIs('stock-in.*') ? 'active' : '' }}">
-                <i class="fa-solid fa-arrow-right-to-bracket menu-icon"></i>
-                <span class="menu-text">Obat Masuk</span>
-            </a>
-            <a href="{{ route('stock-out.index') }}" class="menu-item {{ request()->routeIs('stock-out.*') ? 'active' : '' }}">
-                <i class="fa-solid fa-arrow-right-from-bracket menu-icon"></i>
-                <span class="menu-text">Obat Keluar</span>
-            </a>
+                <div class="menu-header">Transaksi</div>
+                <a href="{{ route('stock-in.index') }}" class="menu-item {{ request()->routeIs('stock-in.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-arrow-right-to-bracket menu-icon"></i>
+                    <span class="menu-text">Obat Masuk</span>
+                </a>
+                <a href="{{ route('stock-out.index') }}" class="menu-item {{ request()->routeIs('stock-out.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-arrow-right-from-bracket menu-icon"></i>
+                    <span class="menu-text">Obat Keluar</span>
+                </a>
 
-            <div class="menu-header">Pemantauan</div>
-            <a href="{{ route('inventory.index') }}" class="menu-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}">
-                <i class="fa-solid fa-boxes-stacked menu-icon"></i>
-                <span class="menu-text">Stok Obat</span>
-            </a>
+                <div class="menu-header">Pemantauan</div>
+                <a href="{{ route('inventory.index') }}" class="menu-item {{ request()->routeIs('inventory.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-boxes-stacked menu-icon"></i>
+                    <span class="menu-text">Stok Obat</span>
+                </a>
 
-            <div class="menu-header">Laporan & Analisis</div>
-            <a href="{{ route('reports.index') }}" class="menu-item {{ request()->routeIs('reports.*') ? 'active' : '' }}">
-                <i class="fa-solid fa-file-invoice menu-icon"></i>
-                <span class="menu-text">Semua Laporan</span>
-            </a>
-            <a href="{{ route('analysis.index') }}" class="menu-item {{ request()->routeIs('analysis.*') ? 'active' : '' }}">
-                <i class="fa-solid fa-chart-pie menu-icon"></i>
-                <span class="menu-text">Analisis Stok</span>
-            </a>
+                <div class="menu-header">Laporan & Analisis</div>
+                <a href="{{ route('reports.index') }}" class="menu-item {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-file-invoice menu-icon"></i>
+                    <span class="menu-text">Semua Laporan</span>
+                </a>
+                <a href="{{ route('analysis.index') }}" class="menu-item {{ request()->routeIs('analysis.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-chart-pie menu-icon"></i>
+                    <span class="menu-text">Analisis Stok</span>
+                </a>
+            @endif
 
             <div class="menu-header">Sistem</div>
             <a href="{{ route('profile.edit') }}" class="menu-item {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-doctor menu-icon"></i>
-                <span class="menu-text">Profil Apoteker</span>
+                <span class="menu-text">Profil Saya</span>
             </a>
         </div>
     </nav>

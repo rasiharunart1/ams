@@ -24,11 +24,22 @@ class DatabaseSeeder extends Seeder
         // ============================================================
         // 1. Create Administrator User
         // ============================================================
+        $superadmin = User::firstOrCreate(
+            ['email' => 'ramaeshanin2@gmail.com'],
+            [
+                'name'     => 'Super Admin',
+                'password' => Hash::make('password123'),
+                'role'     => 'superadmin',
+            ]
+        );
+
         $admin = User::firstOrCreate(
-            ['email' => 'apoteker@ams.co.id'],
+            ['email' => 'himmamatul0418@gmail.com'],
             [
                 'name'     => 'Apoteker Utama',
                 'password' => Hash::make('password123'),
+                'role'     => 'apoteker',
+                'subscription_ends_at' => Carbon::now()->addMonths(1),
             ]
         );
 
@@ -131,6 +142,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->command->info('✅ Database seeded successfully!');
-        $this->command->info('📧 Admin Login: apoteker@ams.co.id | Password: password123');
+        $this->command->info('📧 Superadmin Login: superadmin@ams.co.id | Password: password123');
+        $this->command->info('📧 Apoteker Login: apoteker@ams.co.id | Password: password123');
     }
 }

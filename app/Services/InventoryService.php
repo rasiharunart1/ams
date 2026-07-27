@@ -39,6 +39,12 @@ class InventoryService
             $product->current_stock += $data['quantity'];
             $product->save();
 
+            \App\Models\ActivityLog::create([
+                'user_id' => auth()->id() ?? 1,
+                'action' => 'Obat Masuk',
+                'description' => "Mencatat obat masuk: {$product->name} sejumlah {$data['quantity']} {$product->unit}"
+            ]);
+
             return $stockIn;
         });
     }
@@ -76,6 +82,12 @@ class InventoryService
             // Update current stock
             $product->current_stock -= $data['quantity'];
             $product->save();
+
+            \App\Models\ActivityLog::create([
+                'user_id' => auth()->id() ?? 1,
+                'action' => 'Obat Keluar',
+                'description' => "Mencatat obat keluar: {$product->name} sejumlah {$data['quantity']} {$product->unit}"
+            ]);
 
             return $stockOut;
         });

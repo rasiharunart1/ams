@@ -56,6 +56,12 @@ class ProductController extends Controller
 
         Product::create($validated);
 
+        \App\Models\ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'Tambah Obat',
+            'description' => "Menambahkan obat baru: {$validated['name']} ({$validated['code']})"
+        ]);
+
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
@@ -76,6 +82,12 @@ class ProductController extends Controller
         ]);
 
         $product->update($validated);
+
+        \App\Models\ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'Edit Obat',
+            'description' => "Mengubah data obat: {$product->name} ({$product->code})"
+        ]);
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
     }

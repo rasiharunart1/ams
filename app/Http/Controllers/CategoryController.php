@@ -28,6 +28,12 @@ class CategoryController extends Controller
 
         Category::create($validated);
 
+        \App\Models\ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'Tambah Kategori',
+            'description' => "Menambahkan kategori baru: {$validated['name']}"
+        ]);
+
         return redirect()->route('categories.index')->with('success', 'Kategori berhasil ditambahkan.');
     }
 
@@ -42,6 +48,12 @@ class CategoryController extends Controller
         ]);
 
         $category->update($validated);
+
+        \App\Models\ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'Edit Kategori',
+            'description' => "Mengubah kategori: {$category->name}"
+        ]);
 
         return redirect()->route('categories.index')->with('success', 'Kategori berhasil diperbarui.');
     }

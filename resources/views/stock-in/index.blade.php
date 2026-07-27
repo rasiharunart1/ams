@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0 fw-bold">Transaksi Barang Masuk</h4>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalStockIn">
-            <i class="bi bi-plus-lg me-2"></i>Tambah Data Masuk
+            <i class="fa-solid fa-plus me-2"></i>Tambah Data Masuk
         </button>
     </div>
 
@@ -60,8 +60,8 @@
                                 <td class="text-muted-custom">{{ $trx->description ?? '-' }}</td>
                                 <td>
                                     @if($trx->receipt_path)
-                                        <a href="{{ asset('storage/' . $trx->receipt_path) }}" target="_blank" class="btn btn-sm btn-outline-success" title="Lihat Kwitansi">
-                                            <i class="bi bi-file-earmark-check"></i>
+                                        <a href="{{ asset('storage/' . $trx->receipt_path) }}" target="_blank" class="btn btn-outline-success" title="Lihat Kwitansi">
+                                            <i class="fa-solid fa-receipt"></i>
                                         </a>
                                     @else
                                         <span class="text-muted small">-</span>
@@ -69,18 +69,18 @@
                                 </td>
                                 <td class="text-end">
                                     <a href="{{ route('stock-in.show', $trx->id) }}"
-                                       class="btn btn-sm btn-outline-info me-1" title="Detail & Kelola Kwitansi">
-                                        <i class="bi bi-eye"></i>
+                                       class="btn btn-outline-info me-1" title="Detail & Kelola Kwitansi">
+                                        <i class="fa-solid fa-eye"></i>
                                     </a>
                                     <a href="{{ route('stock-in.receipt', $trx->id) }}" target="_blank"
-                                       class="btn btn-sm btn-outline-primary me-1" title="Cetak Struk PDF">
-                                        <i class="bi bi-file-earmark-pdf"></i>
+                                       class="btn btn-outline-primary me-1" title="Cetak Struk PDF">
+                                        <i class="fa-solid fa-file-pdf"></i>
                                     </a>
                                     <form action="{{ route('stock-in.destroy', $trx->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan transaksi ini? Stok produk akan dikurangi kembali.');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Batalkan Transaksi">
-                                            <i class="bi bi-x-circle-fill"></i>
+                                        <button type="submit" class="btn btn-outline-danger" title="Batalkan Transaksi">
+                                            <i class="fa-solid fa-ban"></i>
                                         </button>
                                     </form>
                                 </td>

@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0 fw-bold">Kategori Produk</h4>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCategory">
-            <i class="bi bi-plus-lg me-2"></i>Tambah Kategori
+            <i class="fa-solid fa-plus me-2"></i>Tambah Kategori
         </button>
     </div>
 
@@ -30,19 +30,20 @@
                                     <span class="badge bg-primary rounded-pill">{{ $category->products_count }}</span>
                                 </td>
                                 <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-warning me-1 edit-category-btn" 
+                                    <button class="btn btn-outline-warning me-1 edit-category-btn" 
                                             data-id="{{ $category->id }}"
                                             data-name="{{ $category->name }}"
                                             data-description="{{ $category->description }}"
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#modalEditCategory">
-                                        <i class="bi bi-pencil-fill"></i>
+                                            data-bs-target="#modalEditCategory"
+                                            title="Edit Kategori">
+                                        <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
                                     <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash-fill"></i>
+                                        <button type="submit" class="btn btn-outline-danger" title="Hapus Kategori">
+                                            <i class="fa-solid fa-trash-can"></i>
                                         </button>
                                     </form>
                                 </td>

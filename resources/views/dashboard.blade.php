@@ -1,12 +1,17 @@
 <x-app-layout>
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0 fw-bold">Dasbor</h4>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="#">Beranda</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Dasbor</li>
-            </ol>
-        </nav>
+        <div class="d-flex align-items-center">
+            <h4 class="mb-0 fw-bold me-3">Dasbor</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="#">Beranda</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Dasbor</li>
+                </ol>
+            </nav>
+        </div>
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalResetData">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i>Reset Semua Data
+        </button>
     </div>
 
     <!-- Stats Row -->
@@ -172,6 +177,44 @@
         </div>
     </div>
 
+    <!-- Modal Reset Data -->
+    <div class="modal fade" id="modalResetData" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger">
+                <form action="{{ route('apoteker.reset-data') }}" method="POST" id="resetDataForm">
+                    @csrf
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i>Peringatan Berbahaya</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-danger fw-bold">Tindakan ini akan menghapus SEMUA data secara permanen:</p>
+                        <ul>
+                            <li>Semua Kategori</li>
+                            <li>Semua Obat</li>
+                            <li>Semua Transaksi Masuk & Keluar</li>
+                            <li>Semua Log Aktivitas</li>
+                        </ul>
+                        <p>Data pengguna <strong>tidak</strong> akan dihapus.</p>
+                        
+                        <hr>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Masukkan Password Anda untuk Konfirmasi</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger" id="btnConfirmReset" disabled>
+                            Ya, Hapus Semua Data (<span id="countdownText">5</span>)
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     @push('scripts')
     <!-- ChartJS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -297,6 +340,34 @@
             });
 
             observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+            // Reset Data Modal Logic
+            const modalReset = document.getElementById('modalResetData');
+            const btnConfirm = document.getElementById('btnConfirmReset');
+            const countdownText = document.getElementById('countdownText');
+            let countdownInterval;
+
+            modalReset.addEventListener('show.bs.modal', function () {
+                let timeLeft = 5;
+                btnConfirm.disabled = true;
+                btnConfirm.innerHTML = `Ya, Hapus Semua Data (<span id="countdownText">${timeLeft}</span>)`;
+                
+                countdownInterval = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById('countdownText').innerText = timeLeft;
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(countdownInterval);
+                        btnConfirm.disabled = false;
+                        btnConfirm.innerHTML = `Ya, Hapus Semua Data`;
+                    }
+                }, 1000);
+            });
+
+            modalReset.addEventListener('hidden.bs.modal', function () {
+                clearInterval(countdownInterval);
+                document.getElementById('resetDataForm').reset();
+            });
         });
     </script>
     @endpush

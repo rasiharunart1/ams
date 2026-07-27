@@ -1,4 +1,37 @@
 <x-app-layout>
+    <!-- Subscription Expired Modal -->
+    @if(session('subscription_expired'))
+        <div class="modal fade" id="subscriptionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-danger">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title fw-bold"><i class="fa-solid fa-circle-exclamation me-2"></i>Akses Terbatas</h5>
+                    </div>
+                    <div class="modal-body text-center py-4">
+                        <i class="fa-solid fa-lock text-danger mb-3" style="font-size: 4rem;"></i>
+                        <h5 class="fw-bold mb-3">Langganan Kedaluwarsa</h5>
+                        <p class="text-muted mb-0">{{ session('subscription_expired') }}</p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger">Keluar dari Sistem</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var myModal = new bootstrap.Modal(document.getElementById('subscriptionModal'));
+                myModal.show();
+            });
+        </script>
+        @endpush
+    @endif
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="mb-0 fw-bold">Profil Saya</h4>
     </div>

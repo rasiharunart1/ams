@@ -11,11 +11,16 @@ use Illuminate\Support\Facades\Route;
 
 // Redirect welcome page to dashboard/login
 Route::get('/', function () {
+    if (auth()->check()) {
+        return auth()->user()->role === 'superadmin' 
+            ? redirect()->route('superadmin.dashboard') 
+            : redirect()->route('dashboard');
+    }
     return redirect()->route('login');
 });
 
-// Authentication protected routes
-Route::middleware(['auth'])->group(function () {
+// Authentication protected routes (Apoteker Only)
+Route::middleware(['auth', 'verified', 'subscription', 'apoteker'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -45,10 +50,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/analysis', [App\Http\Controllers\ReportController::class, 'analysis'])->name('analysis.index');
     Route::get('/api/analysis/product-movement', [App\Http\Controllers\ReportController::class, 'productMovement'])->name('api.analysis.product-movement');
 
-    // Profile Settings
+    // Reset Data
+    Route::post('/reset-data', [App\Http\Controllers\SuperAdminController::class, 'resetData'])->name('apoteker.reset-data');
+});
+
+// Profile Settings (All authenticated users)
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Superadmin Routes
+Route::middleware(['auth', 'verified', 'superadmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\SuperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/users', [App\Http\Controllers\SuperAdminController::class, 'index'])->name('users.index');
+    Route::post('/users', [App\Http\Controllers\SuperAdminController::class, 'store'])->name('users.store');
+    Route::put('/users/{user}', [App\Http\Controllers\SuperAdminController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [App\Http\Controllers\SuperAdminController::class, 'destroy'])->name('users.destroy');
+    Route::post('/reset-data', [App\Http\Controllers\SuperAdminController::class, 'resetData'])->name('reset-data');
 });
 
 require __DIR__.'/auth.php';
