@@ -9,14 +9,14 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Redirect welcome page to dashboard/login
+// Landing Page
 Route::get('/', function () {
     if (auth()->check()) {
         return auth()->user()->role === 'superadmin' 
             ? redirect()->route('superadmin.dashboard') 
             : redirect()->route('dashboard');
     }
-    return redirect()->route('login');
+    return view('welcome');
 });
 
 // Authentication protected routes (Apoteker Only)
