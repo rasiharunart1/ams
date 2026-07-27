@@ -20,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Master Data
+    Route::get('/api/products/next-code', [ProductController::class, 'generateNextCode'])->name('api.products.next-code');
     Route::resource('categories', CategoryController::class)->except(['create', 'show', 'edit']);
     Route::resource('products', ProductController::class);
 
@@ -38,9 +39,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
     Route::get('/api/low-stock-notifications', [InventoryController::class, 'lowStockNotifications'])->name('api.low-stock');
 
-    // Reports
+    // Reports & Analysis
     Route::get('/reports', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/export', [App\Http\Controllers\ReportController::class, 'export'])->name('reports.export');
+    Route::get('/analysis', [App\Http\Controllers\ReportController::class, 'analysis'])->name('analysis.index');
+    Route::get('/api/analysis/product-movement', [App\Http\Controllers\ReportController::class, 'productMovement'])->name('api.analysis.product-movement');
 
     // Profile Settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

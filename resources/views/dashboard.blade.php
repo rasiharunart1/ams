@@ -14,42 +14,42 @@
         <div class="col-xl-3 col-md-6">
             <a href="{{ route('products.index') }}" class="text-decoration-none">
                 <div class="card stat-card stat-card-link">
-                    <div class="stat-icon primary"><i class="bi bi-box-seam"></i></div>
+                    <div class="stat-icon primary"><i class="fa-solid fa-pills"></i></div>
                     <div class="stat-details">
                         <h3>{{ $totalProducts }}</h3>
-                        <p>Total Produk</p>
+                        <p>Total Obat</p>
                     </div>
-                    <i class="bi bi-arrow-right-circle ms-auto text-primary opacity-50"></i>
+                    <i class="fa-solid fa-circle-arrow-right ms-auto text-primary opacity-50"></i>
                 </div>
             </a>
         </div>
         <div class="col-xl-3 col-md-6">
             <a href="{{ route('stock-in.index') }}" class="text-decoration-none">
                 <div class="card stat-card stat-card-link">
-                    <div class="stat-icon success"><i class="bi bi-box-arrow-in-down"></i></div>
+                    <div class="stat-icon success"><i class="fa-solid fa-arrow-right-to-bracket"></i></div>
                     <div class="stat-details">
                         <h3>{{ $stockInMonth }}</h3>
-                        <p>Brg Masuk (Bulan Ini)</p>
+                        <p>Obat Masuk (Bulan Ini)</p>
                     </div>
-                    <i class="bi bi-arrow-right-circle ms-auto text-success opacity-50"></i>
+                    <i class="fa-solid fa-circle-arrow-right ms-auto text-success opacity-50"></i>
                 </div>
             </a>
         </div>
         <div class="col-xl-3 col-md-6">
             <a href="{{ route('stock-out.index') }}" class="text-decoration-none">
                 <div class="card stat-card stat-card-link">
-                    <div class="stat-icon warning"><i class="bi bi-box-arrow-up"></i></div>
+                    <div class="stat-icon warning"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
                     <div class="stat-details">
                         <h3>{{ $stockOutMonth }}</h3>
-                        <p>Brg Keluar (Bulan Ini)</p>
+                        <p>Obat Keluar (Bulan Ini)</p>
                     </div>
-                    <i class="bi bi-arrow-right-circle ms-auto text-warning opacity-50"></i>
+                    <i class="fa-solid fa-circle-arrow-right ms-auto text-warning opacity-50"></i>
                 </div>
             </a>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="card stat-card">
-                <div class="stat-icon danger"><i class="bi bi-exclamation-triangle"></i></div>
+                <div class="stat-icon danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
                 <div class="stat-details">
                     <h3>{{ $lowStockCount }}</h3>
                     <p>Stok Menipis / Habis</p>
@@ -64,7 +64,7 @@
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span>Ringkasan Aliran Stok (6 Bulan Terakhir)</span>
-                    <i class="bi bi-bar-chart-line text-muted"></i>
+                    <i class="fa-solid fa-chart-simple text-muted"></i>
                 </div>
                 <div class="card-body">
                     <div style="position: relative; height: 320px; width: 100%;">
@@ -75,7 +75,7 @@
         </div>
         <div class="col-lg-4">
             <div class="card h-100">
-                <div class="card-header">Produk Berdasarkan Kategori</div>
+                <div class="card-header">Obat Berdasarkan Kategori</div>
                 <div class="card-body">
                     @if(count($categoryCounts) > 0)
                         <div style="position: relative; height: 320px; width: 100%;">
@@ -83,7 +83,7 @@
                         </div>
                     @else
                         <div class="text-center text-muted py-5">
-                            <i class="bi bi-tags-fill display-6 d-block mb-2 text-muted"></i>
+                            <i class="fa-solid fa-tags display-6 d-block mb-2 text-muted"></i>
                             Belum ada data kategori.
                         </div>
                     @endif
@@ -105,7 +105,7 @@
                                     <th>Tipe</th>
                                     <th>No Trx</th>
                                     <th>Tanggal</th>
-                                    <th>Produk</th>
+                                    <th>Obat</th>
                                     <th class="text-end">Jml</th>
                                 </tr>
                             </thead>
@@ -114,9 +114,9 @@
                                     <tr>
                                         <td>
                                             @if($trx->type === 'Masuk')
-                                                <span class="badge badge-safe">Masuk 🟢</span>
+                                                <span class="badge badge-safe">Masuk <i class="fa-solid fa-arrow-down"></i></span>
                                             @else
-                                                <span class="badge badge-danger">Keluar 🔴</span>
+                                                <span class="badge badge-danger">Keluar <i class="fa-solid fa-arrow-up"></i></span>
                                             @endif
                                         </td>
                                         <td class="fw-bold">{{ $trx->transaction_number }}</td>
@@ -148,7 +148,7 @@
                             <li class="list-group-item d-flex align-items-center justify-content-between py-3">
                                 <div class="d-flex align-items-center">
                                     <div class="widget-icon bg-light text-danger me-3" style="width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
-                                        <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                                        <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                     </div>
                                     <div>
                                         <span class="fw-semibold d-block" style="font-size:0.9rem;">{{ $prod->name }}</span>
@@ -162,8 +162,8 @@
                             </li>
                         @empty
                             <li class="list-group-item text-center py-4 text-muted-custom">
-                                <i class="bi bi-check-circle-fill text-success d-block display-6 mb-2"></i>
-                                Semua stok produk aman.
+                                <i class="fa-solid fa-circle-check text-success d-block display-6 mb-2"></i>
+                                Semua stok obat aman.
                             </li>
                         @endforelse
                     </ul>
@@ -196,16 +196,16 @@
                     labels: {!! json_encode($months) !!},
                     datasets: [
                         {
-                            label: 'Barang Masuk',
+                            label: 'Obat Masuk',
                             data: {!! json_encode($stockInData) !!},
-                            borderColor: '#198754',
-                            backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                            borderColor: '#1B5E20',
+                            backgroundColor: 'rgba(27, 94, 32, 0.1)',
                             borderWidth: 3,
                             fill: true,
                             tension: 0.3
                         },
                         {
-                            label: 'Barang Keluar',
+                            label: 'Obat Keluar',
                             data: {!! json_encode($stockOutData) !!},
                             borderColor: '#dc3545',
                             backgroundColor: 'rgba(220, 53, 69, 0.1)',
@@ -257,7 +257,7 @@
                     datasets: [{
                         data: {!! json_encode($categoryCounts) !!},
                         backgroundColor: [
-                            '#0d6efd', '#198754', '#ffc107', '#dc3545', '#0dcaf0', 
+                            '#1B5E20', '#66BB6A', '#A5D6A7', '#E8F5E9', '#0dcaf0', 
                             '#6610f2', '#fd7e14', '#20c997', '#6c757d', '#d63384'
                         ],
                         borderWidth: 0

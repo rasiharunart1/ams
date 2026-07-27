@@ -134,7 +134,10 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="code" class="form-label fw-semibold">Kode Produk <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="code" name="code" required placeholder="Contoh: PRD-001">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="code" name="code" required placeholder="Contoh: PRD-001">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="generateProductCode()" title="Generate Kode"><i class="fa-solid fa-rotate"></i></button>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label fw-semibold">Nama Produk <span class="text-danger">*</span></label>
@@ -144,10 +147,10 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="category_id" class="form-label fw-semibold">Kategori <span class="text-danger">*</span></label>
-                                <select class="form-select" id="category_id" name="category_id" required>
+                                <select class="form-select" id="category_id" name="category_id" required onchange="generateProductCode()">
                                     <option value="" disabled selected>Pilih Kategori</option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}" data-name="{{ $category->name }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -371,6 +374,29 @@
                 custom.classList.remove('d-none');
                 custom.value = value;
             }
+        }
+
+        // ============================================================
+        // Auto Generate Product Code
+        // ============================================================
+        function generateProductCode() {
+            const categorySelect = document.getElementById('category_id');
+            const codeInput = document.getElementById('code');
+            
+            if (!categorySelect.value) return;
+            
+            const categoryName = categorySelect.options[categorySelect.selectedIndex].getAttribute('data-name');
+            
+            // Generate prefix: first 3 letters of category name, uppercase
+            const prefix = categoryName.substring(0, 3).toUpperCase();
+            
+            // Fetch next sequence number from server
+            fetch(`/api/products/next-code?prefix=${prefix}`)
+                .then(res => res.json())
+                .then(data => {
+                    codeInput.value = data.code;
+                })
+                .catch(err => console.error('Error generating code:', err));
         }
 
         document.addEventListener('DOMContentLoaded', () => {

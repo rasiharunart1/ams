@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — WMS Sistem Manajemen Gudang</title>
+    <title>Login — AMS Apotek Management System</title>
     <link rel="icon" type="image/png" href="/logo.png">
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -22,7 +22,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #0d6efd 0%, #0a3d8f 40%, #1e2125 100%);
+            background: linear-gradient(135deg, #1B5E20 0%, #66BB6A 40%, #E8F5E9 100%);
             position: relative;
             overflow: hidden;
         }
@@ -88,12 +88,12 @@
             height: 80px;
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 4px 12px rgba(13,110,253,0.2));
+            filter: drop-shadow(0 4px 12px rgba(27,94,32,0.2));
         }
         .brand-name {
             font-size: 1.8rem;
             font-weight: 800;
-            color: #0d6efd;
+            color: #1B5E20;
             letter-spacing: -1px;
         }
         .brand-subtitle {
@@ -111,8 +111,8 @@
             font-size: 0.95rem;
         }
         .form-control:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+            border-color: #1B5E20;
+            box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.15);
         }
         .input-group-text {
             border-radius: 10px 0 0 10px;
@@ -138,14 +138,14 @@
             transition: all 0.2s ease;
         }
         .input-group:focus-within .input-group-text {
-            border-color: #0d6efd;
-            color: #0d6efd;
+            border-color: #1B5E20;
+            color: #1B5E20;
         }
         .input-group:focus-within .form-control {
-            border-color: #0d6efd;
+            border-color: #1B5E20;
         }
         .input-group:focus-within .input-group-text:last-child {
-            border-color: #0d6efd;
+            border-color: #1B5E20;
         }
 
         .btn-login {
@@ -154,7 +154,7 @@
             border-radius: 10px;
             font-weight: 600;
             font-size: 1rem;
-            background: linear-gradient(135deg, #0d6efd, #0a3d8f);
+            background: linear-gradient(135deg, #1B5E20, #66BB6A);
             border: none;
             color: white;
             transition: all 0.3s ease;
@@ -162,7 +162,7 @@
         }
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(13, 110, 253, 0.4);
+            box-shadow: 0 8px 25px rgba(27, 94, 32, 0.4);
         }
 
         .footer-text {
@@ -179,15 +179,15 @@
 
             <!-- Brand -->
             <div class="brand-logo">
-                <img src="/logo.png" alt="WMS Logo">
-                <span class="brand-name">WMS</span>
+                <i class="fa-solid fa-prescription-bottle-medical" style="font-size: 4rem; color: #1B5E20;"></i>
+                <span class="brand-name">AMS</span>
             </div>
-            <p class="brand-subtitle">Sistem Manajemen Gudang &mdash; Portal Administrator</p>
+            <p class="brand-subtitle">Apotek Management System &mdash; Portal Apoteker</p>
 
             <!-- Session Status -->
             @if (session('status'))
                 <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
-                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <i class="fa-solid fa-circle-check me-2"></i>
                     {{ session('status') }}
                 </div>
             @endif
@@ -200,11 +200,11 @@
                 <div class="mb-3">
                     <label for="email" class="form-label fw-semibold text-dark">Alamat Email</label>
                     <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                        <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                id="email" name="email" value="{{ old('email') }}"
                                required autofocus autocomplete="username"
-                               placeholder="admin@wms.co.id">
+                               placeholder="apoteker@ams.co.id">
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -215,7 +215,7 @@
                 <div class="mb-3">
                     <label for="password" class="form-label fw-semibold text-dark">Kata Sandi</label>
                     <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                        <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                         <input type="password" class="form-control @error('password') is-invalid @enderror"
                                id="password" name="password"
                                required autocomplete="current-password"
@@ -223,7 +223,7 @@
                         <button type="button" class="input-group-text" id="togglePassword"
                                 style="cursor:pointer; border-radius: 0 10px 10px 0; border-left: none;"
                                 title="Tampilkan/Sembunyikan kata sandi">
-                            <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                            <i class="fa-solid fa-eye" id="togglePasswordIcon"></i>
                         </button>
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -246,12 +246,12 @@
 
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-login">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Masuk ke Sistem
+                    <i class="fa-solid fa-right-to-bracket me-2"></i>Masuk ke Sistem
                 </button>
             </form>
 
             <div class="footer-text">
-                &copy; {{ date('Y') }} WMS — Sistem Manajemen Gudang. All rights reserved.
+                &copy; {{ date('Y') }} AMS — Apotek Management System. All rights reserved.
             </div>
         </div>
     </div>
@@ -263,10 +263,10 @@
             const icon = document.getElementById('togglePasswordIcon');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                icon.className = 'bi bi-eye-slash';
+                icon.className = 'fa-solid fa-eye-slash';
             } else {
                 passwordInput.type = 'password';
-                icon.className = 'bi bi-eye';
+                icon.className = 'fa-solid fa-eye';
             }
         });
     </script>

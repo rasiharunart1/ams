@@ -102,4 +102,26 @@ class ProductController extends Controller
     {
         return response()->json($product->load('category'));
     }
+
+    /**
+     * Generate next product code based on prefix.
+     */
+    public function generateNextCode(Request $request)
+    {
+        $prefix = $request->query('prefix', 'PRD');
+        
+        // Find the latest product with this prefix
+        $latestProduct = Product::where('code', 'like', "{$prefix}-%")->orderBy('code', 'desc')->first();
+        
+        if (!$latestProduct) {
+            return response()->json(['code' => "{$prefix}-001"]);
+        }
+        
+        // Extract the number and increment
+        $parts = explode('-', $latestProduct->code);
+        $number = intval(end($parts));
+        $nextNumber = str_pad($number + 1, 3, '0', STR_PAD_LEFT);
+        
+        return response()->json(['code' => "{$prefix}-{$nextNumber}"]);
+    }
 }

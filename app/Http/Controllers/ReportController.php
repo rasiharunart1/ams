@@ -54,6 +54,97 @@ class ReportController extends Controller
     }
 
     /**
+     * Display stock analysis (Fast/Slow moving items).
+     */
+    public function analysis(Request $request)
+    {
+        $days = $request->input('days', 30); // Default 30 days
+        $startDate = Carbon::now()->subDays($days)->toDateString();
+
+        // Fast Moving: Most stock out quantity
+        $fastMoving = Product::withSum(['stockOuts' => function($q) use ($startDate) {
+            $q->whereDate('date', '>=', $startDate);
+        }], 'quantity')
+        ->having('stock_outs_sum_quantity', '>', 0)
+        ->orderBy('stock_outs_sum_quantity', 'desc')
+        ->take(10)
+        ->get();
+
+        // Slow Moving / Dead Stock: Least or zero stock out quantity
+        $slowMoving = Product::withSum(['stockOuts' => function($q) use ($startDate) {
+            $q->whereDate('date', '>=', $startDate);
+        }], 'quantity')
+        ->havingNull('stock_outs_sum_quantity')
+        ->orHaving('stock_outs_sum_quantity', '<=', 5) // Arbitrary threshold
+        ->orderBy('stock_outs_sum_quantity', 'asc')
+        ->take(10)
+        ->get();
+
+        $allProducts = Product::orderBy('name')->get();
+
+        return view('reports.analysis', compact('fastMoving', 'slowMoving', 'days', 'allProducts'));
+    }
+
+    /**
+     * API for product movement chart.
+     */
+    public function productMovement(Request $request)
+    {
+        $productId = $request->input('product_id');
+        $days = $request->input('days', 30);
+        
+        if (!$productId) {
+            return response()->json(['error' => 'Product ID required'], 400);
+        }
+
+        $startDate = Carbon::now()->subDays($days);
+        
+        // Generate date range array
+        $dates = [];
+        $currentDate = clone $startDate;
+        while ($currentDate <= Carbon::now()) {
+            $dates[$currentDate->format('Y-m-d')] = ['in' => 0, 'out' => 0];
+            $currentDate->addDay();
+        }
+
+        // Get Stock In
+        $stockIns = StockIn::where('product_id', $productId)
+            ->whereDate('date', '>=', $startDate->toDateString())
+            ->selectRaw('DATE(date) as formatted_date, sum(quantity) as total')
+            ->groupBy('formatted_date')
+            ->get();
+
+        foreach ($stockIns as $in) {
+            if (isset($dates[$in->formatted_date])) {
+                $dates[$in->formatted_date]['in'] = $in->total;
+            }
+        }
+
+        // Get Stock Out
+        $stockOuts = StockOut::where('product_id', $productId)
+            ->whereDate('date', '>=', $startDate->toDateString())
+            ->selectRaw('DATE(date) as formatted_date, sum(quantity) as total')
+            ->groupBy('formatted_date')
+            ->get();
+
+        foreach ($stockOuts as $out) {
+            if (isset($dates[$out->formatted_date])) {
+                $dates[$out->formatted_date]['out'] = $out->total;
+            }
+        }
+
+        $labels = array_keys($dates);
+        $inData = array_column($dates, 'in');
+        $outData = array_column($dates, 'out');
+
+        return response()->json([
+            'labels' => $labels,
+            'in' => $inData,
+            'out' => $outData
+        ]);
+    }
+
+    /**
      * Helper to fetch data based on filters.
      */
     private function getQueryData($type, $startDate, $endDate, $categoryId)
