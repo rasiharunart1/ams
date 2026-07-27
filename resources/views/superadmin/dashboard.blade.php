@@ -38,7 +38,7 @@
     </div>
 
     <!-- Activity Logs -->
-    <div class="card">
+    <div class="card mb-4">
         <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
             <span><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Aktivitas Pengguna Terbaru</span>
         </div>
@@ -69,6 +69,19 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+
+    <!-- System Logs Iframe -->
+    <div class="card">
+        <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
+            <span><i class="fa-solid fa-server me-2 text-primary"></i>System Logs (Realtime)</span>
+            <a href="{{ route('log-viewer.index') }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-up-right-from-square"></i> Buka Penuh
+            </a>
+        </div>
+        <div class="card-body p-0">
+            <iframe src="{{ route('log-viewer.index') }}" style="width: 100%; height: 600px; border: none; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;"></iframe>
         </div>
     </div>
 
