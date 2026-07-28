@@ -449,6 +449,13 @@
 
             <!-- Content Slot -->
             {{ $slot }}
+
+            <!-- Footer -->
+            <footer class="mt-auto py-3 text-center text-muted small">
+                <hr class="mb-3">
+                &copy; {{ date('Y') }} Apotek Management System. All rights reserved.<br>
+                Copyright by <a href="https://harunarrasyid.vercel.app/" target="_blank" class="text-decoration-none fw-bold text-success">nhmedia-tech</a>
+            </footer>
         </main>
     </div>
 </div>
