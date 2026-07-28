@@ -305,7 +305,7 @@
                     <i class="fa-solid fa-users-gear menu-icon"></i>
                     <span class="menu-text">Kelola Pengguna</span>
                 </a>
-                <a href="{{ url('log-viewer') }}" target="_blank" class="menu-item">
+                <a href="{{ secure_url('log-viewer') }}" target="_blank" class="menu-item">
                     <i class="fa-solid fa-server menu-icon"></i>
                     <span class="menu-text">System Logs</span>
                 </a>
