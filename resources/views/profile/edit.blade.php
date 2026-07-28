@@ -41,9 +41,15 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100 overflow-hidden">
                 <div class="profile-header position-relative">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=0d6efd&color=fff&size=150"
-                         alt="{{ Auth::user()->name }}"
-                         class="profile-avatar shadow">
+                    @if(Auth::user()->avatar)
+                        <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                             alt="{{ Auth::user()->name }}"
+                             class="profile-avatar shadow" id="currentAvatar">
+                    @else
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=1B5E20&color=fff&size=150"
+                             alt="{{ Auth::user()->name }}"
+                             class="profile-avatar shadow" id="currentAvatar">
+                    @endif
                 </div>
                 <div class="profile-info text-center mt-3">
                     <h4 class="fw-bold">{{ Auth::user()->name }}</h4>
@@ -53,14 +59,17 @@
                     </span>
 
                     <div class="mt-4 d-grid gap-2">
+                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#avatarModal">
+                            <i class="fa-solid fa-camera me-1"></i> Ganti Foto Profil
+                        </button>
                         <button class="btn btn-outline-primary btn-sm" onclick="document.getElementById('profile-form').scrollIntoView({ behavior: 'smooth' })">
-                            <i class="bi bi-person-lines-fill me-1"></i> Edit Profil
+                            <i class="fa-solid fa-user-pen me-1"></i> Edit Profil
                         </button>
                         <button class="btn btn-outline-warning btn-sm" onclick="document.getElementById('password-form').scrollIntoView({ behavior: 'smooth' })">
-                            <i class="bi bi-key-fill me-1"></i> Ganti Kata Sandi
+                            <i class="fa-solid fa-key me-1"></i> Ganti Kata Sandi
                         </button>
                         <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDeleteAccount">
-                            <i class="bi bi-trash3-fill me-1"></i> Hapus Akun
+                            <i class="fa-solid fa-trash me-1"></i> Hapus Akun
                         </button>
                     </div>
                 </div>
@@ -237,7 +246,76 @@
         </div>
     </div>
 
+    <!-- Avatar Crop Modal -->
+    <div class="modal fade" id="avatarModal" tabindex="-1" aria-labelledby="avatarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #1B5E20, #66BB6A); color: white;">
+                    <h5 class="modal-title fw-bold" id="avatarModalLabel">
+                        <i class="fa-solid fa-camera me-2"></i>Ganti Foto Profil
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Step 1: Upload -->
+                    <div id="step-upload" class="text-center py-4">
+                        <i class="fa-solid fa-cloud-arrow-up mb-3" style="font-size: 4rem; color: #66BB6A;"></i>
+                        <h5 class="fw-bold mb-2">Pilih Foto</h5>
+                        <p class="text-muted mb-4">Format: JPG, PNG, GIF. Maks. 5MB</p>
+                        <label for="avatarInput" class="btn btn-success px-4">
+                            <i class="fa-solid fa-folder-open me-2"></i>Pilih File
+                        </label>
+                        <input type="file" id="avatarInput" accept="image/*" class="d-none">
+                    </div>
+
+                    <!-- Step 2: Crop -->
+                    <div id="step-crop" class="d-none">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div style="max-height: 400px; overflow: hidden;">
+                                    <img id="cropImage" src="" style="max-width: 100%;">
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex flex-column align-items-center justify-content-center">
+                                <p class="fw-semibold mb-2">Preview</p>
+                                <div class="rounded-circle overflow-hidden border border-3 border-success mb-3" style="width: 120px; height: 120px;">
+                                    <div id="cropPreview" style="width: 120px; height: 120px; overflow: hidden;"></div>
+                                </div>
+                                <div class="d-grid gap-2 w-100">
+                                    <button class="btn btn-outline-secondary btn-sm" id="btnRotateLeft">
+                                        <i class="fa-solid fa-rotate-left"></i> Putar Kiri
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" id="btnRotateRight">
+                                        <i class="fa-solid fa-rotate-right"></i> Putar Kanan
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" id="btnReset">
+                                        <i class="fa-solid fa-xmark"></i> Pilih Ulang
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-success d-none" id="btnSaveAvatar">
+                        <i class="fa-solid fa-floppy-disk me-1"></i>Simpan Foto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden form for avatar upload -->
+    <form id="avatarForm" method="POST" action="{{ route('profile.avatar') }}" class="d-none">
+        @csrf
+        <input type="hidden" name="avatar_data" id="avatarData">
+    </form>
+
     @push('scripts')
+    <!-- Cropper.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script>
         // Live clock on profile page
         function updateClock() {
@@ -253,6 +331,90 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
+
+        // Avatar Cropper
+        let cropper = null;
+
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Ukuran file terlalu besar. Maksimal 5MB.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const cropImage = document.getElementById('cropImage');
+                cropImage.src = ev.target.result;
+
+                document.getElementById('step-upload').classList.add('d-none');
+                document.getElementById('step-crop').classList.remove('d-none');
+                document.getElementById('btnSaveAvatar').classList.remove('d-none');
+
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(cropImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    dragMode: 'move',
+                    autoCropArea: 0.8,
+                    restore: false,
+                    guides: true,
+                    center: true,
+                    highlight: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: false,
+                    preview: '#cropPreview',
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('btnRotateLeft').addEventListener('click', () => cropper && cropper.rotate(-90));
+        document.getElementById('btnRotateRight').addEventListener('click', () => cropper && cropper.rotate(90));
+
+        document.getElementById('btnReset').addEventListener('click', function() {
+            if (cropper) { cropper.destroy(); cropper = null; }
+            document.getElementById('avatarInput').value = '';
+            document.getElementById('step-upload').classList.remove('d-none');
+            document.getElementById('step-crop').classList.add('d-none');
+            document.getElementById('btnSaveAvatar').classList.add('d-none');
+        });
+
+        document.getElementById('btnSaveAvatar').addEventListener('click', function() {
+            if (!cropper) return;
+            const canvas = cropper.getCroppedCanvas({ width: 300, height: 300 });
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+            document.getElementById('avatarData').value = dataUrl;
+            document.getElementById('avatarForm').submit();
+        });
+
+        // Reset modal on close
+        document.getElementById('avatarModal').addEventListener('hidden.bs.modal', function() {
+            if (cropper) { cropper.destroy(); cropper = null; }
+            document.getElementById('avatarInput').value = '';
+            document.getElementById('step-upload').classList.remove('d-none');
+            document.getElementById('step-crop').classList.add('d-none');
+            document.getElementById('btnSaveAvatar').classList.add('d-none');
+        });
+
+        @if(session('status') === 'avatar-updated')
+            document.addEventListener('DOMContentLoaded', function() {
+                const toast = document.createElement('div');
+                toast.className = 'position-fixed bottom-0 end-0 p-3';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `<div class="toast show align-items-center text-white bg-success border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body"><i class="fa-solid fa-check-circle me-2"></i>Foto profil berhasil diperbarui!</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>`;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 4000);
+            });
+        @endif
     </script>
     @endpush
 </x-app-layout>

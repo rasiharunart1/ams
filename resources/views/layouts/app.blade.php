@@ -393,7 +393,11 @@
                 </div>
                 <div class="dropdown">
                     <div class="d-flex align-items-center cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=1B5E20&color=fff" alt="User" class="rounded-circle" width="35" height="35">
+                        @if(Auth::user()->avatar)
+                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="User" class="rounded-circle object-fit-cover" width="35" height="35" style="object-fit: cover;">
+                        @else
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=1B5E20&color=fff" alt="User" class="rounded-circle" width="35" height="35">
+                        @endif
                         <div class="ms-2 d-none d-md-block">
                             <span class="d-block fw-semibold" style="font-size: 0.9rem;">{{ Auth::user()->name }}</span>
                         </div>
