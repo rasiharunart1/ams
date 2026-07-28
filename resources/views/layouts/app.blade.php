@@ -305,7 +305,7 @@
                     <i class="fa-solid fa-users-gear menu-icon"></i>
                     <span class="menu-text">Kelola Pengguna</span>
                 </a>
-                <a href="{{ secure_url('log-viewer') }}" target="_blank" class="menu-item">
+                <a href="{{ route('log-viewer.index') }}" target="_blank" class="menu-item">
                     <i class="fa-solid fa-server menu-icon"></i>
                     <span class="menu-text">System Logs</span>
                 </a>
@@ -504,7 +504,7 @@
 
     // Fetch Low Stock Notifications dynamically via API
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('/api/low-stock-notifications')
+        fetch('{{ secure_url('api/low-stock-notifications') }}')
             .then(res => res.json())
             .then(data => {
                 const countBadge = document.getElementById('notification-count');
