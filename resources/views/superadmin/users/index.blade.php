@@ -185,6 +185,12 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Teleport modals to <body> so Bootstrap modal-backdrop never covers the modal
+            const modalAdd = document.getElementById('modalAddUser');
+            const modalEdit = document.getElementById('modalEditUser');
+            if (modalAdd && modalAdd.parentElement !== document.body) document.body.appendChild(modalAdd);
+            if (modalEdit && modalEdit.parentElement !== document.body) document.body.appendChild(modalEdit);
+
             const editButtons = document.querySelectorAll('.edit-user-btn');
             const editForm = document.getElementById('editUserForm');
             

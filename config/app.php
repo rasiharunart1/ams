@@ -15,6 +15,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'developer_name' => env('DEVELOPER_NAME', 'nhmedia technology'),
+    'developer_url' => env('DEVELOPER_PORTFOLIO_URL', 'https://harunarrasyid.vercel.app'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
